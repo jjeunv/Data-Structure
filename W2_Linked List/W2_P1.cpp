@@ -25,8 +25,9 @@ private:
 	int size;
 public:
 	LinkedList() {
-		this->head = nullptr;
-		this->tail = nullptr;
+		this->head = new Node;
+		this->tail = new Node;
+		this->head->next = this->tail;
 		this->size = 0;
 	}
 	~LinkedList() {
@@ -42,25 +43,19 @@ public:
 			cout << "empty" << endl;
 			return;
 		}
-		Node* curNode = this->head;
-		while (curNode != nullptr) {
+		Node* curNode = this->head->next;
+		while (curNode != this->tail) {
 			cout << curNode->value << " ";
-			curNode=curNode->next;
+			curNode = curNode->next;
 		}
 		cout << endl;
-		
+
 	}
 	void AddFront(int data) {
 		Node* newNode = new Node;
 		newNode->value = data;
-		if(Empty()){
-			this->head = newNode;
-			this->tail = newNode;
-		}
-		else {
-			newNode->next = head;
-			head = newNode;
-		}
+		newNode->next = this->head->next;
+		this->head->next = newNode;
 		this->size++;
 	}
 	void RemoveFront() {
@@ -68,15 +63,9 @@ public:
 			cout << "empty" << endl;
 			return;
 		}
-		Node* deleteNode = head;
+		Node* deleteNode = this->head->next;
 		int deleteValue = deleteNode->value;
-		if (this->size == 1) {
-			this->head = nullptr;
-			this->tail = nullptr;
-		}
-		else {
-			this->head = deleteNode->next;
-		}
+		this->head->next = deleteNode->next;
 		cout << deleteValue << endl;
 		this->size--;
 		delete deleteNode;
@@ -86,7 +75,7 @@ public:
 			cout << "error" << endl;
 			return;
 		}
-		Node* updateNode = this->head;
+		Node* updateNode = this->head->next;
 		for (int i = 0; i < index; i++) {
 			updateNode = updateNode->next;
 		}
@@ -100,8 +89,8 @@ public:
 		int index = 0;
 		int indexNum = 0;
 		int minValue = 10000;
-		Node* curNode = head;
-		while (curNode != nullptr) {
+		Node* curNode = this->head->next;
+		while (curNode != this->tail) {
 			if (curNode->value < minValue) {
 				minValue = curNode->value;
 				indexNum = index;

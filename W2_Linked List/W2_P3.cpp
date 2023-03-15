@@ -25,8 +25,8 @@ private:
 	int size;
 public:
 	LinkedList() {
-		this->head = nullptr;
-		this->tail = nullptr;
+		this->head = new Node;
+		this->tail = this->head;
 		this->size = 0;
 	}
 	~LinkedList() {
@@ -42,7 +42,7 @@ public:
 			cout << "empty" << endl;
 			return;
 		}
-		Node* curNode = this->head;
+		Node* curNode = this->head->next;
 		while (curNode != nullptr) {
 			cout << curNode->value << " ";
 			curNode = curNode->next;
@@ -52,14 +52,8 @@ public:
 	void AddBack(int data) {
 		Node* newNode = new Node;
 		newNode->value = data;
-		if (empty()) {
-			this->head = newNode;
-			this->tail = newNode;
-		}
-		else {
-			this->tail->next = newNode;
-			this->tail = newNode;
-		}
+		this->tail->next = newNode;
+		this->tail = newNode;
 		this->size++;
 	}
 	void RemoveBack() {
@@ -70,17 +64,11 @@ public:
 		Node* prevNode = this->head;
 		Node* removeNode = this->tail;
 		int removeValue = removeNode->value;
-		if (this->size == 1) {
-			this->head = nullptr;
-			this->tail = nullptr;
+		while (prevNode->next != this->tail) {
+			prevNode = prevNode->next;
 		}
-		else {
-			while (prevNode->next != this->tail) {
-				prevNode = prevNode->next;
-			}
-			this->tail = prevNode;
-			prevNode->next = nullptr;
-		}
+		this->tail = prevNode;
+		prevNode->next = nullptr;
 		this->size--;
 		cout << removeValue<<endl;
 		delete removeNode;
@@ -90,7 +78,7 @@ public:
 			cout << "error" << endl;
 			return;
 		}
-		Node* updateNode = this->head;
+		Node* updateNode = this->head->next;
 		for (int i = 0; i < index; i++) {
 			updateNode = updateNode->next;
 		}
@@ -104,7 +92,7 @@ public:
 		int index = 0;
 		int maxValue = 0;
 		int maxIndex = 0;
-		Node* curNode = this->head;
+		Node* curNode = this->head->next;
 		while (curNode != nullptr) {
 			if (curNode->value > maxValue) {
 				maxValue = curNode->value;
